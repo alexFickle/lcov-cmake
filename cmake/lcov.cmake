@@ -141,6 +141,11 @@ function(__lcov_deferred)
             )
             add_dependencies(${clean_target} ${clean_target}-${target})
             add_dependencies(${target} ${clean_target}-${target})
+
+            # add required compile and linker --coverage flag
+            get_target_property(target_type ${target} TYPE)
+            target_compile_options(${target} PUBLIC --coverage)
+            target_link_libraries(${target} PUBLIC --coverage)
         endif()
     endforeach()
 endfunction()
@@ -227,6 +232,4 @@ function(lcov_enable)
         __lcov_include "${includes}"
         __lcov_exclude "${excludes}"
     )
-    add_compile_options(--coverage)
-    add_link_options(--coverage)
 endfunction()
